@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- 
+  -- Week 3 - Net Art
+  -- Phrases that have been on my mind for while, at the moment and predicted. 
+  With supporting hyperlinks to content that I enjoy. 
+  All bounced around in the spaces flashing rainbow colours.
+
+-->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sculpture As 100 Hyperlinks</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; }   /* no scrollbars while links move */
+    a { white-space: nowrap; font-family: sans-serif; font-weight: bold; }
+  </style>
+</head>
+<body>
+<script>
+
+  let links = [
+  { x: 100, y: 100, label: "For when you want ice cream", url: "https://youtu.be/gex2JGKDXIo?t=260", w: 200, h: 400 },
+  { x: 150, y: 120, label: "in the villa", url: "https://youtu.be/gex2JGKDXIo?t=262" },
+  { x: 230, y: 160, label: "2028", url: "https://youtu.be/Yqscc_48tPY?list=RDYqscc_48tPY", w: 700, h: 500 },
+  { x: 400, y: 140, label: "a guide i need", url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error", w: 700, h: 650 },
+  { x: 530, y: 350, label: "when will i be able to say", url: "https://youtu.be/tNwMeMAzqy8?list=RDtNwMeMAzqy8" },
+  { x: 700, y: 360, label: "never", url: "https://youtu.be/YsCFWJKiExI?list=RDYsCFWJKiExI" },
+  { x: 800, y: 340, label: "i shouldn't have", url: "https://youtu.be/o28ey4_zrOI?list=RDo28ey4_zrOI" },
+  { x: 990, y: 150, label: "created on the beach", url: "https://youtu.be/LgaIUqH0w6c?list=RDLgaIUqH0w6c" },
+  { x: 500, y: 130, label: "me if i dont get internship", url: "https://www.pinterest.com/pin/1067493917944551354/" },
+  { x: 780, y: 130, label: "me when i get an internship", url: "https://www.pinterest.com/pin/1067493917944551361/" },
+  { x: 100, y: 160, label: "So Beautiful", url: "https://www.pinterest.com/pin/910079037222750030/" },
+  { x: 470, y: 160, label: "i dont like tiramisu", url: "https://tastesbetterfromscratch.com/easy-tiramisu/" },
+  { x: 100, y: 180, label: "i have so many readings to go through", url: "https://www.pinterest.com/pin/937030266226330940/" },
+  { x: 480, y: 180, label: "I could make that", url: "https://www.pinterest.com/pin/603552787567026237/" },
+  { x: 760, y: 180, label: "Can you buy this for me", url: "https://www.youtube.com/shorts/M_oZVot6nnk" },
+  { x: 300, y: 200, label: "Definitely Need This", url: "https://www.youtube.com/shorts/_L-48A4Na80" },
+  { x: 530, y: 200, label: "i think i am hungry", url: "https://www.youtube.com/shorts/DFf9TabXIHI" },
+  { x: 100, y: 220, label: "I need this", url: "https://www.youtube.com/shorts/ZF9Ii5sz2eM" },
+  { x: 400, y: 220, label: "rAMEN", url: "https://www.youtube.com/shorts/PqDBHAl9cGU" },
+  { x: 600, y: 220, label: "GLUTTONY", url: "https://www.youtube.com/shorts/w31YCDlxQpw" },
+  { x: 350, y: 240, label: "jazz", url: "https://youtu.be/K4-TDkdu5ds?list=RDK4-TDkdu5ds" },
+  { x: 300, y: 260, label: "jazzzzzz", url: "https://youtu.be/sbmKLZ_opuQ?list=RDsbmKLZ_opuQ" },
+  { x: 270, y: 280, label: "jazzzzzzzzzzzzz", url: "https://youtu.be/yaWSjLevVMo?list=RDyaWSjLevVMo" },
+  { x: 900, y: 300, label: "ME", url: "https://www.pinterest.com/pin/177892254003411141/" },
+  ];
+
+  let defaultWidth = 500;
+  let defaultHeight = 600;
+
+  // movement and the colour settings
+  const SPEED = 1.5;          
+  const COLOUR_SPEED = 1.2;   
+  const COLOUR_BY_POSITION = 0.25;  
+
+  function setup() {
+    noCanvas(); // this page only places links, so we don't need a canvas
+    for (let i = 0; i < links.length; i++) {
+      let link = links[i];
+      let a = createA('javascript:void(0)', link.label);
+      a.position(link.x, link.y);
+      a.mousePressed(() => openPopup(link));
+
+      link.el = a;
+      link.vx = random(0.4, 1) * SPEED * random([-1, 1]);   // random direction and speed
+      link.vy = random(0.4, 1) * SPEED * random([-1, 1]);
+      link.hueOffset = random(360);                          // each link starts on a different colour
+      link.hover = false;
+
+      // adds a pause on the link while the mouse is over it, so it's easy to click
+      a.mouseOver(() => link.hover = true);
+      a.mouseOut(() => link.hover = false);
+    }
+  }
+
+  function draw() {
+    for (let i = 0; i < links.length; i++) {
+      let link = links[i];
+
+      if (!link.hover) {
+        link.x += link.vx;
+        link.y += link.vy;
+      }
+
+      // bounce off the edges of the window
+      let w = link.el.elt.offsetWidth;
+      let h = link.el.elt.offsetHeight;
+      if (link.x < 0) { link.x = 0; link.vx *= -1; }
+      if (link.x + w > windowWidth) { link.x = windowWidth - w; link.vx *= -1; }
+      if (link.y < 0) { link.y = 0; link.vy *= -1; }
+      if (link.y + h > windowHeight) { link.y = windowHeight - h; link.vy *= -1; }
+
+      link.el.position(link.x, link.y);
+
+      // colour changes over time and as the link travels across the screen
+      let hue = (link.hueOffset + frameCount * COLOUR_SPEED + (link.x + link.y) * COLOUR_BY_POSITION) % 360;
+      link.el.style('color', `hsl(${hue}, 90%, 50%)`);
+    }
+  }
+
+  // opens a link in its own small popup window
+  function openPopup(link) {
+    let w = link.w || defaultWidth;
+    let h = link.h || defaultHeight;
+    window.open(
+      link.url,
+      '_blank',
+      `width=${w},height=${h},left=100,top=50,resizable=yes,scrollbars=yes`
+    );
+  }
+
+</script>
+</body>
+</html>
