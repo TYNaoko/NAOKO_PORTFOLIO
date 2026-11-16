@@ -5,7 +5,7 @@
   Move a 180° servo motor over web server.
   Additional Components: Servo Motor
 
-  Changed the layout of the phone controller, video will be sent to email.
+  Changed the layout of the phone controller
 */
 
 // ====== Reference Libraries ======

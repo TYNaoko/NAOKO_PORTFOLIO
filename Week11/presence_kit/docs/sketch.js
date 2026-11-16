@@ -1,7 +1,7 @@
 /* 
    Week 11 – Remote Interaction
    When someone is near the BG is cold but when someone is near it becomes warm. Managed to set up the firebase
-   Video will be sent via email.
+   
 */
 
 // ── Settings ─────────────────────────────────────────────────────
